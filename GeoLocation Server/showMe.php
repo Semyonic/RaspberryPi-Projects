@@ -1,6 +1,28 @@
 <?php
-$conn = mysql_connect("localhost", "db_User", "db_Password") or die(mysql_error());
-mysql_select_db("db_Name") or die(mysql_error());
+/**
+ * *************************************************************************
+ *  * Copyright (C) $user$, Inc - All Rights Reserved
+ *  *
+ *  * <omitted copyright blah>
+ *  *
+ *  * @file        com.maddyhome.idea.copyright.pattern.FileInfo@1366eca5$
+ *  * @author      $user$
+ *  * @site        <my website>
+ *  * @date        $date$
+ *  
+ */
+
+try{
+    $db = new PDO("dbtype:host=localhost;dbname=db_Name;charset=utf8","username","password");
+    /*Other Codes*/
+}catch(PDOException  $e ){
+    echo "Error: ".$e;
+}
+
+
+// Deprecated
+//$conn = mysql_connect("localhost", "db_User", "db_Password") or die(mysql_error());
+//mysql_select_db("db_Name") or die(mysql_error());
 ?>
 
     <html>
@@ -61,6 +83,24 @@ mysql_select_db("db_Name") or die(mysql_error());
                 });
 
 <?php
+
+            try{
+                $db = new PDO("dbtype:host=localhost;dbname=db_Name;charset=utf8","username","password");
+                $db->query("SELECT * FROM Location WHERE id=".$mysecuredata);
+            }catch(PDOException  $e ){
+                echo "Error: ".$e;
+            }
+
+            foreach ($conn->query($sql) as $row) {
+                $id = $row['ID'];
+                $lat = $row['Enlem'];
+                $lon = ['Boylam'];
+                $date = $row['Zaman'];
+            }
+?>
+            
+/*
+ * Deprecated
 $query = mysql_query("SELECT * FROM Location")or die(mysql_error());
 while($row = mysql_fetch_array($query))
 {
@@ -70,7 +110,8 @@ while($row = mysql_fetch_array($query))
   $date = $row['Zaman'];
   echo("addMarker($lat, $lon, '<b>$id</b><br />$date');\n");
 }
-?>
+*/
+
  center = bounds.getCenter();
      map.fitBounds(bounds);
 
