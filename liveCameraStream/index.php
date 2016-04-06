@@ -17,7 +17,6 @@
   </head>
   <body class="preview" id="top" data-spy="scroll" data-target=".subnav" data-offset="80">
 
-
   <!-- Navbar
     ================================================== -->
  <div class="navbar navbar-fixed-top">
