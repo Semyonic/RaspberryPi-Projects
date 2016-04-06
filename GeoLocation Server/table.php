@@ -6,6 +6,10 @@ $db_pwd = 'db_Password';
 $database = 'db_Name';
 $table = 'db_Table';
 
+$db_conn = new  PDO('mysql:host=localhost;dbname=db_Name','db_User','db_Password');
+$db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+// deprecated
 if (!mysql_connect($db_host, $db_user, $db_pwd))
     die("Can't connect to database");
 
@@ -22,6 +26,7 @@ $fields_num = mysql_num_fields($result);
 
 echo "<center><h1>Konum Tablosu</h1></center>";
 echo "<center><table style='width:100%>' border='2'><tr></center>";
+
 // printing table headers
 for($i=0; $i<$fields_num; $i++)
 {

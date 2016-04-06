@@ -1,20 +1,13 @@
 <?php
 
-$db_host = 'localhost';
-$db_user = 'db_User';
-$db_pwd = 'db_Password';
-$database = 'db_Name';
-$table = 'db_Table';
-
-if (!mysql_connect($db_host, $db_user, $db_pwd))
-    die("Can't connect to database");
-
-if (!mysql_select_db($database))
-    die("Can't select database");
+$db_conn = new  PDO('mysql:host=localhost;dbname=db_Name','db_User','db_Password');
+$db_conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 //Set default location
 $lat_d = 40.709;
 $long_d = -74.007;
+
+$qry = $db_conn->prepare('INSERT INTO  Location(`Enlem`,`Boylam`,`Isabet`) VALUES (:Enlem,:Boylam,:Isabet)');
 
 // mimic a result array from MySQL
 $result = array(array('latitude'=>$lat_d,'longitude'=>$long_d));
@@ -22,8 +15,7 @@ $result = array(array('latitude'=>$lat_d,'longitude'=>$long_d));
 <!doctype html>
 <html>
     <head>
-        <script type="text/javascript" src="http://maps.googleapis.com/maps/api
-/js?sensor=false"></script>
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript">
         var map;
         function initialize() {
@@ -42,11 +34,35 @@ $result = array(array('latitude'=>$lat_d,'longitude'=>$long_d));
             map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
         <?php
             // uncomment the 2 lines below to get real data from the db
-             $result = mysql_query("SELECT Enlem,Boylam FROM Location");
-             while ($row = mysql_fetch_array($result))
+            $qry->bindParam(':Enlem', $Enlem);
+            $qry->bindParam(':Boylam', $Boylam);
+            $qry->bindParam(':Isabet', $Isabet);
+            $qry->execute();
+            $qry->execute("SELECT Enlem,Boylam FROM Location");
+
+            /*Deprecated
+            while ($row = mysql_fetch_array($result))
             	 echo "addMarker(new google.maps.LatLng(".$row['Enlem'].", ".$row['Boylam']."), map);";
         ?>
         }
+            */
+
+            try {
+                $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+
+                $sql = 'SELECT lastname, firstname, jobtitle FROM employees WHERE lastname LIKE ?';
+
+                $q = $conn->prepare($sql);
+                $q->execute(array('%son'));
+                $q->setFetchMode(PDO::FETCH_ASSOC);
+
+                while ($r = $q->fetch()) {
+                    echo sprintf('%s <br/>', $r['lastname']);
+                }
+            } catch (PDOException $pe) {
+                die("Could not connect to the database $dbname :" . $pe->getMessage());
+            }
+
         function addMarker(latLng, map) {
             var marker = new google.maps.Marker({
                 position: latLng,
@@ -54,7 +70,6 @@ $result = array(array('latitude'=>$lat_d,'longitude'=>$long_d));
                 draggable: false,
                 animation: google.maps.Animation.DROP
             });
-
             return marker;
         }
         </script>
